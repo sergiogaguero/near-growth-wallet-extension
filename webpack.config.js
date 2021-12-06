@@ -4,10 +4,12 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 const config = {
   entry: {
-    popup: path.join(__dirname, "src/popup.tsx"),
-    content: path.join(__dirname, "src/content.ts"),
-    background: path.join(__dirname, "src/background.ts"),
+    popup: path.join(__dirname, "src/extension/popup.tsx"),
+    content: path.join(__dirname, "src/extension/content.ts"),
+    background: path.join(__dirname, "src/extension/background.ts"),
   },
+  mode: 'development',
+  devtool: 'inline-source-map',
   output: { path: path.join(__dirname, "dist"), filename: "[name].js" },
   module: {
     rules: [
@@ -17,28 +19,9 @@ const config = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"],
-        exclude: /\.module\.css$/,
-      },
-      {
         test: /\.ts(x)?$/,
         loader: "ts-loader",
         exclude: /node_modules/,
-      },
-      {
-        test: /\.css$/,
-        use: [
-          "style-loader",
-          {
-            loader: "css-loader",
-            options: {
-              importLoaders: 1,
-              modules: true,
-            },
-          },
-        ],
-        include: /\.module\.css$/,
       },
       {
         test: /\.svg$/,
@@ -54,6 +37,10 @@ const config = {
             },
           },
         ],
+      },
+      {
+        test: /\.(s(a|c)ss)$/,
+        use: ['style-loader','css-loader', 'sass-loader']
       },
     ],
   },
